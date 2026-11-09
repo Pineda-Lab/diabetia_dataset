@@ -67,7 +67,7 @@ Auxiliary outputs used in the text and figures:
 │   ├── cohort.py         # Cohort description (windows per patient, follow-up, ages)
 │   ├── figure_windows.R     # Supplementary Figure S1: window design (R, ggplot2)
 │   ├── figure_temporal.R    # Supplementary Figure S2: temporal coverage (R, ggplot2)
-│   └── run.py            # Runs table1.py, summary.py, validation.py, completeness.py, consistency.py and temporal.py reading the dataset only once
+│   └── run.py            # Runs the Python tables and checks above reading the dataset only once
 ├── covid_mx/
 │   └── summary.py        # Harmonized summary of the Mexican COVID-19 open data
 ├── registro_cancer/
@@ -108,7 +108,7 @@ SIDIAP, CPRD and MIMIC-IV are not processed here. Their columns in Table 2 use t
 
 ## How to run
 
-Requires Python 3.9 or later. Figures 2, 4 and 5 also need R (≥ 4.1) with `data.table`, `ggplot2`, `scales` and `wesanderson`; if `Rscript` is not found, `run_all.sh` skips them. Using a virtual environment is recommended:
+Requires Python 3.9 or later. Figures 2 and 3 and Supplementary Figures S1 and S2 also need R (≥ 4.1) with `data.table`, `ggplot2`, `scales` and `wesanderson`; if `Rscript` is not found, `run_all.sh` skips them. Using a virtual environment is recommended:
 
 ```bash
 git clone https://github.com/Pineda-Lab/diabetia-insignia.git
@@ -119,10 +119,10 @@ pip install -r requirements.txt
 ./run_all.sh
 ```
 
-`./run_all.sh summary` generates the descriptive tables (1, S1 and 2) and Figure 2, `./run_all.sh validation` the Technical Validation tables (S2, S3, S7, S8) and figures, and `./run_all.sh` or `./run_all.sh all` everything. `run_all.sh` runs every step in order and skips the comparison datasets that are not present in `data/`. Table 2 is generated anyway, with "–" in their columns. Each script can also be run on its own:
+`./run_all.sh summary` generates the descriptive tables (1, S1 and 2) and Figure 2, `./run_all.sh validation` the Technical Validation tables (S2, S3, S7–S9), the re-identification risk, the cohort description and figures, and `./run_all.sh` or `./run_all.sh all` everything. `run_all.sh` runs every step in order and skips the comparison datasets that are not present in `data/`. Table 2 is generated anyway, with "–" in their columns. Each script can also be run on its own:
 
 ```bash
-python diabetia/run.py              # Tables 1, S1, S2, S3, S7 and S8, and DiabetIA summary
+python diabetia/run.py              # Tables 1, S1–S3 and S7–S9, DiabetIA summary, re-identification risk and cohort description
 Rscript diabetia/figure_patient.R     # Figure 2 (reads the DiabetIA file again)
 Rscript diabetia/figure_patient.R --top 3          # 3 best candidates: patients/figure_patient_<cx_curp>.{pdf,png} + patients/figure_patient_candidates.csv
 Rscript diabetia/figure_patient.R --profiles       # one patient per clinical profile: patients/figure_patient_<profile>_<cx_curp>.{pdf,png}
