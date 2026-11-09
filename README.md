@@ -3,6 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![Manuscript: under review](https://img.shields.io/badge/manuscript-under%20review-orange.svg)](#citation)
+[![Project: DiabetIA](https://img.shields.io/badge/project-pinedalab.ai%2Fdiabetia-green.svg)](https://pinedalab.ai/diabetia/)
 
 Code to reproduce the descriptive tables of the manuscript:
 
@@ -11,7 +12,7 @@ Code to reproduce the descriptive tables of the manuscript:
 
 DiabetIA is a de-identified longitudinal dataset of primary care electronic health records from six clinics of the Mexican Institute for Social Security (IMSS) in Michoacán, Mexico (2005–2020). It includes 136,674 adult patients.
 
-This repository contains **only code**. No patient-level data are included.
+This repository is part of the [DiabetIA project](https://pinedalab.ai/diabetia/) of the Pineda Lab, under the subproject *Flagship Project to Describe the Repository* (*Proyecto Insignia*). It contains **only code**. No patient-level data are included.
 
 ## What this code produces
 
@@ -155,9 +156,11 @@ Obesity is BMI ≥30. BMI categories are <18.5, 18.5–24.9, 25–29.9 and ≥30
 | Luis M. García-Velázquez, PhD | ENES Morelia, UNAM | Data validation, statistical analyses and data quality reports |
 | Karina M. Figueroa-Mora, PhD | Faculty of Physical and Mathematical Sciences, UMSNH | Data validation, statistical analyses and data quality reports |
 | Cleto Alvarez-Aguilar, MD, MS ✉ | Faculty of Medical and Biological Sciences "Dr. Ignacio Chávez", UMSNH | Conceived and designed the study; funding, regulatory approvals and clinical oversight |
-| Anel Gómez-García, PhD ✉ | Biomedical Research Center of Michoacán (CIBIMI), IMSS | Funding, regulatory and ethics approvals, data anonymization (honest broker) and clinical oversight |
+| Anel Gómez-García, PhD ✉ | Biomedical Research Center of Michoacán (CIBIMI), IMSS | Principal Investigator of the DiabetIA project; funding, regulatory and ethics approvals, data anonymization (honest broker) and clinical oversight |
 
 ✉ Corresponding authors. UNAM: National Autonomous University of Mexico. UMSNH: Universidad Michoacana de San Nicolás de Hidalgo. IMSS: Mexican Institute for Social Security.
+
+More about the project, its team and its other subprojects: <https://pinedalab.ai/diabetia/>.
 
 ## Citation
 
