@@ -147,18 +147,12 @@ Obesity is BMI ≥30. BMI categories are <18.5, 18.5–24.9, 25–29.9 and ≥30
 
 ## Research team
 
-| Researcher | Affiliation | Role |
-|---|---|---|
-| Arturo López-Pineda, PhD ✉ | Amphora Health; ENES Morelia, UNAM | Conceived and designed the study; supervised the data harmonization pipeline; repository maintainer |
-| Joaquín Tripp, BS, MS | Amphora Health | ETL software architecture, data extraction and OMOP CDM mapping |
-| Daniel Santana-Quinteros, BS, MS | Amphora Health | ETL software architecture, data extraction and OMOP CDM mapping |
-| Marisol Flores-Garrido, PhD | ENES Morelia, UNAM | Data validation, statistical analyses and data quality reports |
-| Luis M. García-Velázquez, PhD | ENES Morelia, UNAM | Data validation, statistical analyses and data quality reports |
-| Karina M. Figueroa-Mora, PhD | Faculty of Physical and Mathematical Sciences, UMSNH | Data validation, statistical analyses and data quality reports |
-| Cleto Alvarez-Aguilar, MD, MS ✉ | Faculty of Medical and Biological Sciences "Dr. Ignacio Chávez", UMSNH | Conceived and designed the study; funding, regulatory approvals and clinical oversight |
-| Anel Gómez-García, PhD ✉ | Biomedical Research Center of Michoacán (CIBIMI), IMSS | Principal Investigator of the DiabetIA project; funding, regulatory and ethics approvals, data anonymization (honest broker) and clinical oversight |
-
-✉ Corresponding authors. UNAM: National Autonomous University of Mexico. UMSNH: Universidad Michoacana de San Nicolás de Hidalgo. IMSS: Mexican Institute for Social Security.
+- **Anel Gómez-García, PhD**: Biomedical Research Center of Michoacán (CIBIMI), Mexican Institute for Social Security (IMSS)
+- **Arturo López-Pineda, PhD**: National School of Higher Studies, Morelia Campus (ENES Morelia), National Autonomous University of Mexico (UNAM); Amphora Health
+- **Cleto Alvarez-Aguilar, MD, MS**: Faculty of Medical and Biological Sciences "Dr. Ignacio Chávez", Universidad Michoacana de San Nicolás de Hidalgo (UMSNH)
+- **Karina M. Figueroa-Mora, PhD**: Faculty of Physical and Mathematical Sciences "Mat. Luis Manuel Rivera Gutiérrez", UMSNH
+- **Marisol Flores-Garrido, PhD**: ENES Morelia, UNAM
+- **Luis M. García-Velázquez, PhD**: ENES Morelia, UNAM
 
 More about the project, its team and its other subprojects: <https://pinedalab.ai/diabetia/>.
 
