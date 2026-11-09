@@ -1,5 +1,9 @@
 # DiabetIA: analysis code
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+[![Manuscript: under review](https://img.shields.io/badge/manuscript-under%20review-orange.svg)](#citation)
+
 Code to reproduce the descriptive tables of the manuscript:
 
 > López-Pineda A, Tripp J, Santana-Quinteros D, Flores-Garrido M, García-Velázquez LM, Figueroa-Mora KM, Alvarez-Aguilar C, Gómez-García A.
@@ -34,7 +38,9 @@ The `.html` files are formatted to be pasted into a word processor. The `.csv` f
 ├── registro_cancer/
 │   └── summary.py        # Harmonized summary of the Mexican National Cancer Registry
 ├── run_all.sh            # Runs the full pipeline in order
-└── requirements.txt
+├── requirements.txt      # Pinned dependencies
+├── CITATION.cff          # Citation metadata
+└── LICENSE               # MIT License
 ```
 
 Code comments are in Spanish; variable names and outputs are in English.
@@ -68,9 +74,13 @@ SIDIAP, CPRD and MIMIC-IV are not processed here. Their columns in Table 2 use t
 
 ## How to run
 
-Requires Python 3.9 or later.
+Requires Python 3.9 or later. Using a virtual environment is recommended:
 
 ```bash
+git clone https://github.com/Pineda-Lab/diabetia-insignia.git
+cd diabetia-insignia
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ./run_all.sh
 ```
@@ -83,6 +93,13 @@ python covid_mx/summary.py          # COVID-19 summary (reads ~3.5 GB; several G
 python registro_cancer/summary.py   # Cancer registry summary
 python diabetia/table2.py           # Table 2, from the summaries in results/
 ```
+
+### Reproducibility
+
+- Dependency versions are pinned in `requirements.txt`.
+- The results in the manuscript were produced with Python 3.9.6 on macOS.
+- The full pipeline takes a few minutes. Reading the COVID-19 files dominates the runtime and needs several GB of RAM.
+- The scripts are deterministic: they involve no sampling or random seeds, so the same input files give the same tables.
 
 ## Definitions
 
@@ -118,6 +135,42 @@ Obesity is BMI ≥30. BMI categories are <18.5, 18.5–24.9, 25–29.9 and ≥30
 - Ages are grouped as <18, 18–64 and ≥65, the groups reported by SIDIAP, CPRD and MIMIC-IV.
 - The yearly COVID-19 files overlap. Records are deduplicated by `ID_REGISTRO`, keeping the most recent update. Each record is a suspected or confirmed case, not a unique patient.
 - The cancer registry has no patient identifier. Each row is an incident case.
+
+## Project status
+
+| Component | Status |
+|---|---|
+| Table 1 (DiabetIA, stratified by T2D) | Done |
+| Table 2 (comparison with other databases) | Done; MIMIC-IV currently uses published values |
+| Technical Validation (missingness, out-of-range values) | Planned |
+
+## Research team
+
+| Researcher | Affiliation | Role |
+|---|---|---|
+| Arturo López-Pineda, PhD ✉ | Amphora Health; ENES Morelia, UNAM | Conceived and designed the study; supervised the data harmonization pipeline; repository maintainer |
+| Joaquín Tripp, BS, MS | Amphora Health | ETL software architecture, data extraction and OMOP CDM mapping |
+| Daniel Santana-Quinteros, BS, MS | Amphora Health | ETL software architecture, data extraction and OMOP CDM mapping |
+| Marisol Flores-Garrido, PhD | ENES Morelia, UNAM | Data validation, statistical analyses and data quality reports |
+| Luis M. García-Velázquez, PhD | ENES Morelia, UNAM | Data validation, statistical analyses and data quality reports |
+| Karina M. Figueroa-Mora, PhD | Faculty of Physical and Mathematical Sciences, UMSNH | Data validation, statistical analyses and data quality reports |
+| Cleto Alvarez-Aguilar, MD, MS ✉ | Faculty of Medical and Biological Sciences "Dr. Ignacio Chávez", UMSNH | Conceived and designed the study; funding, regulatory approvals and clinical oversight |
+| Anel Gómez-García, PhD ✉ | Biomedical Research Center of Michoacán (CIBIMI), IMSS | Funding, regulatory and ethics approvals, data anonymization (honest broker) and clinical oversight |
+
+✉ Corresponding authors. UNAM: National Autonomous University of Mexico. UMSNH: Universidad Michoacana de San Nicolás de Hidalgo. IMSS: Mexican Institute for Social Security.
+
+## Citation
+
+If you use this code, please cite the manuscript (citation details will be updated upon publication). GitHub also offers a "Cite this repository" button, generated from [`CITATION.cff`](CITATION.cff).
+
+## Acknowledgements
+
+- **Funding:** participating institutions, and the National Council of Science, Humanities and Technology (CONAHCyT) through FORDECyT under the National Strategic Programs (ProNacEs), registration number 10410.
+- **Ethics:** the study was approved by the IMSS Ethics and Research Committees, protocol R-2018-785-051.
+
+## Contributing and issues
+
+Questions about the code, or problems reproducing the tables, can be reported through [GitHub Issues](https://github.com/Pineda-Lab/diabetia-insignia/issues). Questions about access to the DiabetIA dataset should go through ENI Salud (see [Data](#data)).
 
 ## License
 
