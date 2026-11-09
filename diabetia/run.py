@@ -3,14 +3,18 @@
 Uso: python diabetia/run.py [--only summary|validation]
   summary     Tablas 1 y S1 (estadística descriptiva) y el resumen para la Tabla 2.
   validation  Technical Validation: Tablas S2 (plausibilidad), S3 (completitud), S7 (consistencia)
-              y S8 (cobertura temporal).
+              S8 (cobertura temporal) y S9 (comparación con la ENSANUT), riesgo de reidentificación (k-anonimato)
+              y descripción de la cohorte (ventanas, seguimiento y edad).
 Sin --only se generan todas.
 """
 
 import argparse
 
+from cohort import write_cohort
 from completeness import write_completeness
 from consistency import write_consistency
+from external import write_external
+from privacy import write_privacy
 from process import load_data, process
 from summary import write_summary
 from table1 import write_table1
@@ -32,6 +36,9 @@ def main() -> None:
         write_completeness(df)
         write_consistency(df)
         write_temporal(df)
+        write_privacy(df)
+        write_external(df)
+        write_cohort(df)
 
 
 if __name__ == "__main__":

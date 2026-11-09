@@ -3,9 +3,9 @@
 # (manuscript/, supplementary/, auxiliary/ y patients/).
 #
 # Uso: ./run_all.sh [summary|validation|all]
-#   summary     Estadística descriptiva: Tablas 1, S1 y 2 (incluye las bases de comparación) y Figura 2
+#   summary     Estadística descriptiva: Tablas 1, S1 y 2 (incluye las bases de comparación), Figura 2 y Figura S1
 #               (trayectoria de un paciente; requiere R).
-#   validation  Technical Validation: Tablas S2, S3, S7 y S8 y figuras (requiere R).
+#   validation  Technical Validation: Tablas S2, S3, S7, S8 y S9, riesgo de reidentificación y figuras (requiere R).
 #   all         Todo lo anterior (opción por defecto).
 # Las bases de comparación que no estén en data/ se omiten; table2.py deja su columna con "–".
 
@@ -51,6 +51,7 @@ case "$MODE" in
         run diabetia/run.py --only summary
         summary_tables
         run_r diabetia/figure_patient.R
+        run_r diabetia/figure_windows.R
         ;;
     validation)
         run diabetia/run.py --only validation
@@ -63,6 +64,7 @@ case "$MODE" in
         run_r diabetia/figure_patient.R
         run_r diabetia/figure_validation.R
         run_r diabetia/figure_temporal.R
+        run_r diabetia/figure_windows.R
         ;;
     -h|--help)
         sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'

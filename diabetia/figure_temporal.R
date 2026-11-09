@@ -5,7 +5,7 @@
 # Lee results/auxiliary/temporal_coverage.csv (generado por diabetia/temporal.py); no vuelve a leer la base.
 #
 # Uso: Rscript diabetia/figure_temporal.R
-# Genera results/supplementary/figure_temporal.{pdf,png} (Figura Suplementaria S1)
+# Genera results/supplementary/figure_temporal.{pdf,png} (Figura Suplementaria S2)
 
 suppressPackageStartupMessages({
   library(data.table)

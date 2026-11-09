@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from process import PATIENT_ID, ROOT, load_data, process
+from process import PATIENT_ID, ROOT, has_visit, load_data, process
 
 RESULTS_DIR = ROOT / "results"
 MANUSCRIPT_DIR = RESULTS_DIR / "manuscript"        # tablas y figuras del manuscrito principal
@@ -32,12 +32,14 @@ FOOTNOTE = (
     "{baseline} "
     "T2D with complications= any diagnosis of E11.2, E11.3, E11.4 or E11.5. "
     "Categorical variables are n (%) relative to the total of each column. "
-    "Continuous variables are median (interquartile range) of the patients with a recorded value (n)."
+    "Vital signs are mean (standard deviation) and biochemical values median (interquartile range) of the "
+    "patients with a recorded value (n)."
 )
 BASELINE_NOTE = {
-    "first": "Age, BMI, vital signs, biochemical values and diagnoses were taken from the first two-year window of each patient.",
-    "any": "Age, BMI, vital signs and biochemical values were taken from the first two-year window; "
-           "diagnoses were present in any window of follow-up.",
+    "first": "Age, BMI, vital signs, biochemical values and diagnoses were taken from the first two-year window "
+             "with at least one visit of each patient (baseline window).",
+    "any": "Age, BMI, vital signs and biochemical values were taken from the first two-year window with at least "
+           "one visit of each patient; diagnoses were present in any window of follow-up.",
 }
 
 T2D = "diabetes_mellitus_type_2"
@@ -106,9 +108,11 @@ AGE_LABELS = ["18 – 44", "45 - 64", "65 and older"]
 def patient_level(df: pd.DataFrame, baseline: str = "first") -> pd.DataFrame:
     """Resume las ventanas a un renglón por paciente.
 
-    Demografía, edad e IMC siempre vienen de la primera ventana.
+    Demografía, edad, IMC, signos vitales y laboratorios vienen de la ventana basal: la primera ventana con al
+    menos una visita. Se toma la ventana completa (no el primer valor disponible de cada columna), para que
+    todas las variables del paciente correspondan al mismo periodo.
     Los diagnósticos dependen de `baseline`:
-      - "first": presentes en la primera ventana (corte basal; reproduce el manuscrito).
+      - "first": presentes en la ventana basal (Tabla 1).
       - "any": presentes en cualquier ventana del paciente (prevalencia durante el seguimiento).
     """
     if baseline not in ("first", "any"):
@@ -116,13 +120,14 @@ def patient_level(df: pd.DataFrame, baseline: str = "first") -> pd.DataFrame:
 
     dx_cols = list(COMPLICATIONS.values()) + [c for cols in COMORBIDITIES.values() for c in cols]
 
-    first = df.sort_values("window").groupby(PATIENT_ID).first()
+    visits = df[has_visit(df)]
+    first = visits.sort_values("window").groupby(PATIENT_ID).head(1).set_index(PATIENT_ID)
     continuous_cols = [col for col, _ in CONTINUOUS.values()]
     patients = first[["cs_sex", "age_at_wx", "fn_weight_median", "fn_height_median"] + continuous_cols].copy()
     if baseline == "first":
         patients[dx_cols] = first[dx_cols] > 0
     else:
-        patients[dx_cols] = df.groupby(PATIENT_ID)[dx_cols].max() > 0
+        patients[dx_cols] = (df.groupby(PATIENT_ID)[dx_cols].max() > 0).reindex(patients.index)
 
     patients["bmi"] = patients["fn_weight_median"] / patients["fn_height_median"] ** 2
     has_comp = patients[list(COMPLICATIONS.values())].any(axis=1)
@@ -139,6 +144,14 @@ def _count(mask: pd.Series) -> str:
     return f"{int(mask.sum()):,} ({mask.mean():.2%})"
 
 
+def _mean_sd(values: pd.Series, decimals: int) -> str:
+    """Celda continua: "media (DE); n=" con los pacientes que tienen valor (signos vitales, con preferencia de dígito)."""
+    values = values.dropna()
+    if values.empty:
+        return "–"
+    return f"{values.mean():,.{decimals}f} ({values.std():,.{decimals}f}); n={len(values):,}"
+
+
 def _median_iqr(values: pd.Series, decimals: int) -> str:
     """Celda continua: "mediana (Q1–Q3); n=" con los pacientes que tienen valor."""
     values = values.dropna()
@@ -149,7 +162,7 @@ def _median_iqr(values: pd.Series, decimals: int) -> str:
 
 
 def table1(df: pd.DataFrame, baseline: str = "first") -> pd.DataFrame:
-    """Calcula la Tabla 1: "n (%)" para categóricas y "mediana (RIC); n" para continuas."""
+    """Calcula la Tabla 1: "n (%)" para categóricas, "media (DE); n" para signos vitales y "mediana (RIC); n" para laboratorios."""
     patients = patient_level(df, baseline)
     columns = {GROUPS[0]: patients}
     columns.update({g: patients[patients["group"] == g] for g in GROUPS[1:]})
@@ -166,7 +179,7 @@ def table1(df: pd.DataFrame, baseline: str = "first") -> pd.DataFrame:
         rows.update({("Age at first window (years)", a): _count(age == a) for a in AGE_LABELS})
         rows.update({("Comorbidities", name): _count(p[cols].any(axis=1)) for name, cols in COMORBIDITIES.items()})
         rows.update({("Chronic complications", name): _count(p[col]) for name, col in COMPLICATIONS.items()})
-        rows.update({("Vital signs", name): _median_iqr(p[col], dec) for name, (col, dec) in VITAL_SIGNS.items()})
+        rows.update({("Vital signs", name): _mean_sd(p[col], dec + 1) for name, (col, dec) in VITAL_SIGNS.items()})
         rows.update({("Biochemical", name): _median_iqr(p[col], dec) for name, (col, dec) in BIOCHEMICAL.items()})
         return rows
 

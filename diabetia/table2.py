@@ -136,7 +136,7 @@ CHARACTERISTICS = {
 TITLE = "Table 2. Comparison of DiabetIA with other clinical databases and registries."
 FOOTNOTE = (
     "Counts are n (%) relative to the patients (or records, when patients are not uniquely identified) of each database. "
-    "DiabetIA: values from the first two-year window, as in Table 1; obesity = BMI ≥30. "
+    "DiabetIA: values from the first two-year window with a visit, as in Table 1; obesity = BMI ≥30. "
     "COVID-19 Open Data: suspected or confirmed cases, deduplicated by record ID; comorbidities as reported at intake. "
     "{literature} "
     "– = not available or not reported."

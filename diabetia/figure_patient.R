@@ -75,7 +75,14 @@ drug_labels <- c(
   anti_inflammatory_non_steroids = "NSAIDs", antiflamatory_steroids = "Corticosteroids",
   antiulcerous_and_protectors_of_the_gastric_mucosa = "Gastric protectors",
   bronchodilators_and_expectorants = "Bronchodilators", disease_modifiing_drugs = "Disease-modifying drugs",
-  lipid_lowering = "Lipid-lowering", oral_electrolytes = "Oral electrolytes"
+  lipid_lowering = "Lipid-lowering", oral_electrolytes = "Oral electrolytes",
+  ocular_drugs = "Ophthalmic drugs", hormonal = "Hormones", anti_allergic = "Antiallergics",
+  drugs_used_in_nephrology = "Nephrology drugs", analgesics_urinary = "Urinary analgesics",
+  systemic_and_topical_antifungals = "Antifungals", drugs_used_in_neurology = "Neurology drugs",
+  drugs_used_in_psychiatry = "Psychiatric drugs", erectile_dysfunction = "Erectile dysfunction drugs",
+  drugs_used_in_hypothyroidism = "Thyroid hormones", drugs_used_in_hyperthyroidism = "Antithyroid drugs",
+  complete_nutritional_formulas = "Nutritional formulas", drugs_used_in_breast_cancer = "Breast cancer drugs",
+  drugs_used_in_osteoporosis = "Osteoporosis drugs", alpha_blockers = "Alpha blockers"
 )
 measures <- c("fn_weight", "fn_height", "fn_ta_systolic", "fn_ta_diastolic", "in_glucose", "fn_fasting_glucose")
 
@@ -126,14 +133,16 @@ rank_candidates <- function(min_windows = 8, min_bmi_share = 0.8) {
 }
 
 # Perfiles clínicos para elegir ejemplos variados: el mejor candidato de cada perfil, sin repetir pacientes.
+# En los perfiles de una complicación, esa es la única complicación crónica del paciente (así no salen
+# siempre los mismos pacientes con las cuatro complicaciones).
 # Si ningún paciente cumple el perfil con el seguimiento mínimo, se relaja a 5 ventanas e IMC en 60%.
 profiles <- list(
   coronary = quote(coronary),
   no_hypertension = quote(!hypertension),
-  nephropathy = quote(incident_nephropathy),
-  retinopathy = quote(incident_retinopathy),
-  neuropathy = quote(incident_neuropathy),
-  diabetic_foot = quote(incident_diabetic_foot),
+  nephropathy = quote(incident_nephropathy & complications == 1),
+  retinopathy = quote(incident_retinopathy & complications == 1),
+  neuropathy = quote(incident_neuropathy & complications == 1),
+  diabetic_foot = quote(incident_diabetic_foot & complications == 1),
   multiple_complications = quote(complications >= 3),
   incident_t2d = quote(incident_t2d),
   man = quote(sex == "M")
@@ -183,7 +192,7 @@ draw_patient <- function(id, stem) {
   label_last <- function(d, y, label, colour) {
     last <- d[!is.na(get(y))][.N]
     if (!nrow(last)) return(NULL)
-    annotate("text", x = last$t + 0.15, y = last[[y]], label = label, hjust = 0, size = 2.3, colour = colour)
+    annotate("text", x = max(d$t) + 0.15, y = last[[y]], label = label, hjust = 0, size = 2.3, colour = colour)
   }
 
   dx <- melt(p[, c("t", names(diagnoses)), with = FALSE], id.vars = "t", variable.name = "diagnosis",
@@ -234,6 +243,7 @@ draw_patient <- function(id, stem) {
     event_lines(with_labels = TRUE, types = "t2d") +
     geom_hline(yintercept = c(25, 30), colour = "grey80", linewidth = 0.3, linetype = "22") +
     geom_line(colour = col_anthro, linewidth = 0.6) + geom_point(colour = col_anthro, size = 1.4) +
+    scale_y_continuous(expand = expansion(mult = c(0.05, 0.3))) +  # espacio para las etiquetas de aparición
     x_scale + labs(title = "B. Body mass index", y = "kg/m²") + base_theme + no_x
 
   p_bp <- ggplot(p, aes(x = t)) +
