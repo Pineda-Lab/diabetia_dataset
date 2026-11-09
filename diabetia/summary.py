@@ -25,7 +25,7 @@ def summary(df: pd.DataFrame) -> pd.Series:
     rows = {
         ("", "Patients"): f"{len(patients):,}",
         ("", "Records"): (f"{int(has_visit(df).sum()):,} two-year windows with a visit "
-                          f"(≥ {visit_counts(df)['lower_bound_non_overlapping']:,} visits)"),
+                          f"(≥ {visit_counts(df)['visits_min']:,} visits)"),
         ("", "Collection years"): f"{pd.to_datetime(df['first_cx']).dt.year.min()}–{pd.to_datetime(df['last_cx']).dt.year.max()}",
         ("Sex", "Female"): _count(patients["cs_sex"] == "F"),
         ("Sex", "Male"): _count(patients["cs_sex"] == "M"),

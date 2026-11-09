@@ -88,7 +88,7 @@ CHARACTERISTICS = {
         "Care setting": "Primary care / Outpatient",
         "Country": "Mexico (Michoacán)",
         "Design / Horizon": "Longitudinal",
-        "Data standard": "OMOP CDM v5.4 (Tabular ext. available)",
+        "Data standard": "Tabular (CSV), ICD-10 codes",
         "Access": "Controlled (DUA)",
     },
     "SIDIAP": {
@@ -96,7 +96,7 @@ CHARACTERISTICS = {
         "Care setting": "Primary care / Outpatient",
         "Country": "Spain (Catalonia)",
         "Design / Horizon": "Longitudinal",
-        "Data standard": "Relational database (mapped to OMOP CDM)",
+        "Data standard": "Relational database",
         "Access": "Controlled (public research institutions, project approval)",
     },
     "CPRD": {
@@ -112,7 +112,7 @@ CHARACTERISTICS = {
         "Care setting": "ICU & Emergency / Inpatient",
         "Country": "United States (Boston, MA)",
         "Design / Horizon": "Longitudinal (per admission)",
-        "Data standard": "Relational database (OMOP ext. available)",
+        "Data standard": "Relational database",
         "Access": "Credentialed (training + PhysioNet DUA)",
     },
     "National Cancer Registry (Mexico)": {

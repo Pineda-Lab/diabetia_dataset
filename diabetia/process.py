@@ -62,15 +62,33 @@ def has_visit(df: pd.DataFrame) -> pd.Series:
 def visit_counts(df: pd.DataFrame) -> dict:
     """Visitas: la suma sobre ventanas cuenta dos veces los años en que se traslapan ventanas sucesivas.
 
-    Cota inferior sin traslapes: por paciente, la mayor suma entre las ventanas impares y las pares
-    (cada conjunto cubre años disjuntos).
+    Las n ventanas de un paciente empiezan un año aparte y cubren n + 1 años: c_k = v_k + v_(k+1). Con n impar,
+    las ventanas 1, 3, …, n cubren todos los años sin traslape y el total es exacto. Con n par, el total es
+    (ventanas impares) + v_(n+1) = (ventanas pares) + v_1; es exacto si el primer año no tiene visitas (first_cx un
+    año o más después del inicio de la primera ventana) o el último tampoco (last_cx antes del segundo año de la
+    última ventana); si no, queda acotado por max(impares, pares) y min(impares + c_n, pares + c_1).
     """
-    counts = df["count_cx_w"].fillna(0)
-    odd = counts.where(df["window"] % 2 == 1, 0).groupby(df[PATIENT_ID]).sum()
-    even = counts.where(df["window"] % 2 == 0, 0).groupby(df[PATIENT_ID]).sum()
+    d = df[[PATIENT_ID, "x_start", "first_cx", "last_cx"]].copy()
+    for col in ["x_start", "first_cx", "last_cx"]:
+        d[col] = pd.to_datetime(d[col], errors="coerce")
+    d["c"] = df["count_cx_w"].fillna(0)
+    d = d.sort_values([PATIENT_ID, "x_start"])
+    k = d.groupby(PATIENT_ID).cumcount()
+    g = d.groupby(PATIENT_ID)
+    odd = d["c"].where(k % 2 == 0, 0).groupby(d[PATIENT_ID]).sum()  # ventanas 1, 3, 5, …
+    even = d["c"].where(k % 2 == 1, 0).groupby(d[PATIENT_ID]).sum()
+    n, first, last = g.size(), g.first(), g.last()
+    first_year_empty = first["first_cx"] >= first["x_start"] + pd.DateOffset(years=1)
+    last_year_empty = last["last_cx"] < last["x_start"] + pd.DateOffset(years=1)
+    exact = odd.where((n % 2 == 1) | last_year_empty, even.where(first_year_empty))
+    low = exact.fillna(odd.combine(even, max))
+    high = exact.fillna((odd + last["c"]).combine(even + first["c"], min))
     return {
-        "sum_over_windows": int(counts.sum()),
-        "lower_bound_non_overlapping": int(odd.combine(even, max).sum()),
+        "sum_over_windows": int(d["c"].sum()),
+        "visits_min": int(low.sum()),
+        "visits_max": int(high.sum()),
+        "patients_exact": int((low == high).sum()),
+        "patients": int(len(n)),
     }
 
 
