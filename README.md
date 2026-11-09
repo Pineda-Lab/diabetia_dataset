@@ -5,7 +5,7 @@
 [![Manuscript: in preparation](https://img.shields.io/badge/manuscript-in%20preparation-orange.svg)](#citation)
 [![Project: DiabetIA](https://img.shields.io/badge/project-pinedalab.ai%2Fdiabetia-green.svg)](https://pinedalab.ai/diabetia/)
 
-Code to reproduce the descriptive tables of the manuscript:
+Code to reproduce the tables and figures of the manuscript (descriptive statistics and Technical Validation):
 
 > López-Pineda A, Tripp J, Santana-Quinteros D, Flores-Garrido M, García-Velázquez LM, Figueroa-Mora KM, Alvarez-Aguilar C, Gómez-García A.
 > **DiabetIA: An Open-Access Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico.** *(in preparation)*
@@ -16,13 +16,31 @@ This repository is part of the [DiabetIA project](https://pinedalab.ai/diabetia/
 
 ## What this code produces
 
+Outputs are written to four subfolders of `results/` (not versioned): `manuscript/` (tables and figures of the main text), `supplementary/` (Supplementary Tables), `auxiliary/` (summaries and intermediate values) and `patients/` (candidate patients for Figure 2).
+
 | Output | Manuscript | Script |
 |---|---|---|
-| `results/table1_first.{csv,html}` | Table 1: demographic, clinical and baseline biochemical characteristics, stratified by type 2 diabetes status | `diabetia/table1.py` |
-| `results/table1_any.{csv,html}` | Sensitivity version of Table 1: diagnoses present in any window of follow-up | `diabetia/table1.py` |
-| `results/table2.{csv,html}` | Table 2: comparison of DiabetIA with other clinical databases and registries | `diabetia/table2.py` |
+| `results/manuscript/table1.{csv,html}` | Table 1: demographic, clinical and baseline biochemical characteristics, stratified by type 2 diabetes status | `diabetia/table1.py` |
+| `results/manuscript/table2.{csv,html}` | Table 2: comparison of DiabetIA with other clinical databases and registries | `diabetia/table2.py` |
+| `results/manuscript/figure_patient.{pdf,png}` | Figure 2: longitudinal trajectory of one patient (diagnoses, BMI, blood pressure, glucose, prescriptions and visits) | `diabetia/figure_patient.R` |
+| `results/manuscript/figure_validation.{pdf,png}` | Figure 3: distributions of the measurements and laboratory values | `diabetia/figure_validation.R` |
+| `results/supplementary/table_s1.{csv,html}` | Supplementary Table S1: Table 1 with diagnoses present in any window of follow-up | `diabetia/table1.py` |
+| `results/supplementary/table_s2.{csv,html}` | Supplementary Table S2: plausibility, recorded minimum and maximum values versus reference ranges and extreme values documented in the literature | `diabetia/validation.py` |
+| `results/supplementary/table_s3.{csv,html}` | Supplementary Table S3: completeness of each variable by window, type 2 diabetes status and patient | `diabetia/completeness.py` |
+| `results/supplementary/table_s7.{csv,html}` | Supplementary Table S7: internal consistency of dates, ages, diagnoses and window structure | `diabetia/consistency.py` |
+| `results/supplementary/table_s8.{csv,html}` | Supplementary Table S8: temporal coverage by care unit | `diabetia/temporal.py` |
+| `results/supplementary/figure_temporal.{pdf,png}` | Supplementary Figure S1: completeness of each variable by year of window start | `diabetia/figure_temporal.R` |
 
-The `.html` files are formatted to be pasted into a word processor. The `.csv` files hold the same values.
+The `.html` files are formatted to be pasted into a word processor. The `.csv` files hold the same values. Supplementary Table S4 (reference ranges and extreme documented values, also in `diabetia/limits.csv`), Supplementary Table S5 (clinical categories and reference values) and Supplementary Table S6 (data records) are written directly in the Supplementary Material.
+
+Auxiliary outputs used in the text and figures:
+
+| Output | Content | Script |
+|---|---|---|
+| `results/auxiliary/summary_*.csv` | Harmonized summaries of each database, read by `table2.py` | `*/summary.py` |
+| `results/auxiliary/figure_validation_stats.csv` | n, mean, SD, P25, median, P75 and values outside the plotted range for each variable of Figure 3 | `diabetia/figure_validation.R` |
+| `results/auxiliary/temporal_coverage.csv` | Windows, patients and completeness of each variable by year of window start (data of Supplementary Figure S1) | `diabetia/temporal.py` |
+| `results/auxiliary/visit_counts.csv` | Visits summed over windows and lower bound without the overlap between successive windows | `diabetia/consistency.py` |
 
 ## Repository structure
 
@@ -33,7 +51,15 @@ The `.html` files are formatted to be pasted into a word processor. The `.csv` f
 │   ├── table1.py         # Table 1
 │   ├── summary.py        # Harmonized summary of DiabetIA for Table 2
 │   ├── table2.py         # Table 2 (computed columns + values reported in the literature)
-│   └── run.py            # Runs table1.py and summary.py reading the dataset only once
+│   ├── validation.py     # Technical Validation: plausibility of recorded values (Table S2)
+│   ├── completeness.py   # Technical Validation: completeness of each variable (Table S3)
+│   ├── consistency.py    # Technical Validation: internal consistency (Table S7)
+│   ├── temporal.py       # Technical Validation: temporal coverage (Table S8, data for the temporal figure)
+│   ├── limits.csv        # Reference ranges and extreme documented values (Tables S2 and S4, Figure 3)
+│   ├── figure_patient.R     # Figure 2: trajectory of one patient (R, ggplot2)
+│   ├── figure_validation.R  # Figure 3: distributions (R, ggplot2)
+│   ├── figure_temporal.R    # Supplementary Figure S1: temporal coverage (R, ggplot2)
+│   └── run.py            # Runs table1.py, summary.py, validation.py, completeness.py, consistency.py and temporal.py reading the dataset only once
 ├── covid_mx/
 │   └── summary.py        # Harmonized summary of the Mexican COVID-19 open data
 ├── registro_cancer/
@@ -74,7 +100,7 @@ SIDIAP, CPRD and MIMIC-IV are not processed here. Their columns in Table 2 use t
 
 ## How to run
 
-Requires Python 3.9 or later. Using a virtual environment is recommended:
+Requires Python 3.9 or later. Figures 2, 4 and 5 also need R (≥ 4.1) with `data.table`, `ggplot2`, `scales` and `wesanderson`; if `Rscript` is not found, `run_all.sh` skips them. Using a virtual environment is recommended:
 
 ```bash
 git clone https://github.com/Pineda-Lab/diabetia-insignia.git
@@ -85,13 +111,19 @@ pip install -r requirements.txt
 ./run_all.sh
 ```
 
-`run_all.sh` runs every step in order and skips the comparison datasets that are not present in `data/`. Table 2 is generated anyway, with "–" in their columns. Each script can also be run on its own:
+`./run_all.sh summary` generates the descriptive tables (1, S1 and 2) and Figure 2, `./run_all.sh validation` the Technical Validation tables (S2, S3, S7, S8) and figures, and `./run_all.sh` or `./run_all.sh all` everything. `run_all.sh` runs every step in order and skips the comparison datasets that are not present in `data/`. Table 2 is generated anyway, with "–" in their columns. Each script can also be run on its own:
 
 ```bash
-python diabetia/run.py              # Table 1 and DiabetIA summary
+python diabetia/run.py              # Tables 1, S1, S2, S3, S7 and S8, and DiabetIA summary
+Rscript diabetia/figure_patient.R     # Figure 2 (reads the DiabetIA file again)
+Rscript diabetia/figure_patient.R --top 3          # 3 best candidates: patients/figure_patient_<cx_curp>.{pdf,png} + patients/figure_patient_candidates.csv
+Rscript diabetia/figure_patient.R --profiles       # one patient per clinical profile: patients/figure_patient_<profile>_<cx_curp>.{pdf,png}
+Rscript diabetia/figure_patient.R <cx_curp> [...]  # specific patients: patients/figure_patient_<cx_curp>.{pdf,png}
+Rscript diabetia/figure_validation.R  # Figure 3 (reads the DiabetIA file again)
+Rscript diabetia/figure_temporal.R    # Supplementary Figure S1 (from results/auxiliary/temporal_coverage.csv)
 python covid_mx/summary.py          # COVID-19 summary (reads ~3.5 GB; several GB of RAM)
 python registro_cancer/summary.py   # Cancer registry summary
-python diabetia/table2.py           # Table 2, from the summaries in results/
+python diabetia/table2.py           # Table 2, from the summaries in results/auxiliary/
 ```
 
 ### Reproducibility
@@ -107,9 +139,11 @@ These are the definitions implemented in the code. They are also stated in the t
 
 **Cohort.** The tabular release has 477,036 rows (two-year windows) from 137,131 patients. Patients without a care unit recorded in any of their windows (457 patients, "sparse or irregular visit patterns" in the manuscript) are excluded. This leaves 136,674 patients and 475,924 windows.
 
-**Baseline.** Each window has two years of follow-up (`x_start`–`x_end`) and one year for outcome assessment (`y_start`–`y_end`). Table 1 uses each patient's first window:
+**Windows.** Each window has two years of follow-up (`x_start`–`x_end`) and one year for outcome assessment (`y_start`–`y_end`). Successive windows of a patient start one year apart, so consecutive windows overlap by one year. Because of this overlap, summing `count_cx_w` over windows counts most visits twice; `visit_counts.csv` reports that sum and a lower bound without the overlap. 61,154 windows (12.9%) have no visit (no care unit and no visit count) and no measurements; completeness (Table S3) and plausibility (Table S2) are computed over the 414,770 windows with a visit.
 
-- Age is `age_at_wx`, the age at the end of the first follow-up period.
+**Baseline.** Table 1 uses each patient's first window:
+
+- Age is `age_at_wx`, the age at the start of the window (`x_start`). The data dictionary describes it as the age at `x_end`, but the dates show it is the age at `x_start`.
 - BMI is the median weight divided by the squared median height within the window.
 - Vital signs and biochemical values are the within-window medians, summarized as median (IQR) among patients with a recorded value.
 
@@ -130,6 +164,15 @@ These are the definitions implemented in the code. They are also stated in the t
 
 Obesity is BMI ≥30. BMI categories are <18.5, 18.5–24.9, 25–29.9 and ≥30.
 
+**Patient trajectory (Figure 2).** Unless a `cx_curp` is given, the patient is selected automatically among those with ≥ 8 windows and BMI in ≥ 80% of them, maximizing the number of windows, a T2D diagnosis during follow-up, a chronic complication, windows with glucose and drug groups prescribed. To protect privacy, the figure shows no identifier or calendar dates: time is in years since the start of follow-up and age is given in a 5-year band. The identifier is only printed in the console.
+
+**Technical Validation.** The checks follow the data quality framework of Kahn et al. (EGEMS 2016;4(1):1244).
+
+- *Plausibility (Table S2, Figure 3):* each window's minimum and maximum are compared with the extreme values documented in the literature (`limits.csv`). Values beyond them are counted, not removed. Figure 3 shows the within-window medians with their median and interquartile range, limited to the 0.5th–99.5th percentiles.
+- *Completeness (Table S3):* a variable is recorded in a window when its within-window median is not missing (BMI needs weight and height). Windows are grouped by the diagnoses recorded up to that window; diagnosis columns behave cumulatively.
+- *Consistency (Table S7):* 25 rules on the order and length of the periods, age versus date of birth, care unit versus visits, sex-specific diagnoses (E28, E29), window numbering and spacing, and the year and age of T2D diagnosis.
+- *Temporal coverage (Table S8, Supplementary Figure S1):* windows, patients and completeness by year of window start and by care unit.
+
 **Comparison datasets (Table 2).**
 
 - Ages are grouped as <18, 18–64 and ≥65, the groups reported by SIDIAP, CPRD and MIMIC-IV.
@@ -142,7 +185,8 @@ Obesity is BMI ≥30. BMI categories are <18.5, 18.5–24.9, 25–29.9 and ≥30
 |---|---|
 | Table 1 (DiabetIA, stratified by T2D) | Done |
 | Table 2 (comparison with other databases) | Done; MIMIC-IV currently uses published values |
-| Technical Validation (missingness, out-of-range values) | Planned |
+| Technical Validation: plausibility, completeness, consistency and temporal coverage (Tables S2, S3, S7, S8; Figure 3; Supplementary Figure S1) | Done |
+| Extreme limits for minimum weight, minimum heart rate and respiratory rate (`limits.csv`) | Pending clinical validation |
 
 ## Research team
 

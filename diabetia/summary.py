@@ -5,11 +5,10 @@ Usa las mismas definiciones que la Tabla 1 (primera ventana) para que las cifras
 
 import pandas as pd
 
-from process import ROOT, load_data, process
-from table1 import COMORBIDITIES, patient_level
+from process import ROOT, has_visit, load_data, process, visit_counts
+from table1 import AUXILIARY_DIR, COMORBIDITIES, patient_level
 
-RESULTS_DIR = ROOT / "results"
-OUTPUT_FILE = RESULTS_DIR / "summary_diabetia.csv"
+OUTPUT_FILE = AUXILIARY_DIR / "summary_diabetia.csv"
 
 # Mismos rangos que reportan SIDIAP, CPRD y MIMIC-IV, para poder comparar.
 AGE_BINS = [-1, 17, 64, 200]
@@ -25,7 +24,8 @@ def summary(df: pd.DataFrame) -> pd.Series:
     age = pd.cut(patients["age_at_wx"], AGE_BINS, labels=AGE_LABELS)
     rows = {
         ("", "Patients"): f"{len(patients):,}",
-        ("", "Records"): f"{len(df):,} two-year windows ({int(df['count_cx_w'].sum()):,} visits)",
+        ("", "Records"): (f"{int(has_visit(df).sum()):,} two-year windows with a visit "
+                          f"(≥ {visit_counts(df)['lower_bound_non_overlapping']:,} visits)"),
         ("", "Collection years"): f"{pd.to_datetime(df['first_cx']).dt.year.min()}–{pd.to_datetime(df['last_cx']).dt.year.max()}",
         ("Sex", "Female"): _count(patients["cs_sex"] == "F"),
         ("Sex", "Male"): _count(patients["cs_sex"] == "M"),
@@ -43,8 +43,8 @@ def summary(df: pd.DataFrame) -> pd.Series:
 
 
 def write_summary(df: pd.DataFrame) -> None:
-    """Genera results/summary_diabetia.csv a partir de los datos ya procesados."""
-    RESULTS_DIR.mkdir(exist_ok=True)
+    """Genera results/auxiliary/summary_diabetia.csv a partir de los datos ya procesados."""
+    AUXILIARY_DIR.mkdir(parents=True, exist_ok=True)
     summary(df).rename_axis(["Variable", "Category"]).to_csv(OUTPUT_FILE)
     print(f"Generado: {OUTPUT_FILE.relative_to(ROOT)}")
 

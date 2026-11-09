@@ -11,7 +11,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data" / "registro-cancer"
 INPUT_FILE = DATA_DIR / "Mexico-RegistroNacionalCancer2020.xlsx"
-RESULTS_DIR = ROOT / "results"
+RESULTS_DIR = ROOT / "results" / "auxiliary"
 OUTPUT_FILE = RESULTS_DIR / "summary_registro_cancer.csv"
 
 # Mismos rangos que reportan SIDIAP, CPRD y MIMIC-IV, para poder comparar.
@@ -49,7 +49,7 @@ def summary(df: pd.DataFrame) -> pd.Series:
 
 
 def main() -> None:
-    RESULTS_DIR.mkdir(exist_ok=True)
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     result = summary(load_data())
     result.rename_axis(["Variable", "Category"]).to_csv(OUTPUT_FILE)
     print(f"Generado: {OUTPUT_FILE.relative_to(ROOT)}")

@@ -1,13 +1,13 @@
 """Tabla 2 del paper: comparación de DiabetIA con otras bases de datos clínicas.
 
 Combina dos tipos de columnas:
-  - Calculadas: resúmenes armonizados results/summary_*.csv (summary.py de cada carpeta).
+  - Calculadas: resúmenes armonizados results/auxiliary/summary_*.csv (summary.py de cada carpeta).
   - Literatura: valores reportados en los artículos de descripción de cada base (LITERATURE).
 """
 
 import pandas as pd
 
-from table1 import RESULTS_DIR, save_word_table
+from table1 import AUXILIARY_DIR, MANUSCRIPT_DIR, RESULTS_DIR, save_word_table
 
 # Columnas calculadas a partir de los datos: archivo de resumen -> nombre en la tabla.
 COMPUTED = {
@@ -155,7 +155,7 @@ def table2() -> pd.DataFrame:
     """Une las columnas calculadas y de literatura; lo que falte queda como "–"."""
     columns = {}
     for filename, name in COMPUTED.items():
-        path = RESULTS_DIR / filename
+        path = AUXILIARY_DIR / filename
         if path.exists():
             columns[name] = pd.read_csv(path, index_col=[0, 1], keep_default_na=False).iloc[:, 0]
         else:
@@ -173,12 +173,13 @@ def table2() -> pd.DataFrame:
 
 def main() -> None:
     result = table2()
-    result.to_csv(RESULTS_DIR / "table2.csv")
+    MANUSCRIPT_DIR.mkdir(parents=True, exist_ok=True)
+    result.to_csv(MANUSCRIPT_DIR / "table2.csv")
     references = "; ".join(f"{name}: {source['reference']}" for name, source in LITERATURE.items())
     notes = " ".join(source["note"] for source in LITERATURE.values())
     footnote = FOOTNOTE.format(literature=f"Values reported in the literature ({references}). {notes}")
-    save_word_table(result, RESULTS_DIR / "table2.html", TITLE, footnote)
-    print("Generado: results/table2.csv y results/table2.html")
+    save_word_table(result, MANUSCRIPT_DIR / "table2.html", TITLE, footnote)
+    print("Generado: results/manuscript/table2.csv y results/manuscript/table2.html")
 
 
 if __name__ == "__main__":

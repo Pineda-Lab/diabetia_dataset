@@ -12,11 +12,23 @@ import pandas as pd
 from process import PATIENT_ID, ROOT, load_data, process
 
 RESULTS_DIR = ROOT / "results"
+MANUSCRIPT_DIR = RESULTS_DIR / "manuscript"        # tablas y figuras del manuscrito principal
+SUPPLEMENTARY_DIR = RESULTS_DIR / "supplementary"  # tablas del material suplementario
+AUXILIARY_DIR = RESULTS_DIR / "auxiliary"          # resúmenes y cálculos intermedios
 
 TITLE = "Table 1. Demographic, clinical and baseline biochemical characteristics of the study population."
+# La versión con diagnósticos en cualquier ventana va al Material Suplementario.
+OUTPUTS = {
+    "first": ("table1", TITLE),
+    "any": (
+        "table_s1",
+        "Supplementary Table S1. Demographic, clinical and baseline biochemical characteristics of the study "
+        "population, with diagnoses present in any window of follow-up.",
+    ),
+}
 FOOTNOTE = (
     "T2D= Type 2 diabetes; HTN= Arterial hypertension; BMI= Body Mass Index. "
-    "Underweight= BMI<18.5; Normal weight= BMI ≥18.5 and <25; Overweight= BMI ≥25 and <30; Obesity= BMI ≥30. "
+    "Underweight= BMI<18.5; Normal weight= BMI ≥18.5 and <25; Overweight= BMI ≥25 and <30; Obesity= BMI ≥30 (World Health Organization categories; see Supplementary Table S5). "
     "{baseline} "
     "T2D with complications= any diagnosis of E11.2, E11.3, E11.4 or E11.5. "
     "Categorical variables are n (%) relative to the total of each column. "
@@ -194,14 +206,15 @@ def save_word_table(table: pd.DataFrame, path: Path, title: str, footnote: str) 
 
 
 def write_table1(df: pd.DataFrame) -> None:
-    """Genera results/table1_{first,any}.{csv,html} a partir de los datos ya procesados."""
-    RESULTS_DIR.mkdir(exist_ok=True)
-    for baseline in ("first", "any"):
+    """Genera results/manuscript/table1.{csv,html} y results/supplementary/table_s1.{csv,html}."""
+    for baseline, (name, title) in OUTPUTS.items():
+        out_dir = SUPPLEMENTARY_DIR if name.startswith("table_s") else MANUSCRIPT_DIR
+        out_dir.mkdir(parents=True, exist_ok=True)
         result = table1(df, baseline)
-        result.to_csv(RESULTS_DIR / f"table1_{baseline}.csv")
+        result.to_csv(out_dir / f"{name}.csv")
         footnote = FOOTNOTE.format(baseline=BASELINE_NOTE[baseline])
-        save_word_table(result, RESULTS_DIR / f"table1_{baseline}.html", TITLE, footnote)
-        print(f"Generado: results/table1_{baseline}.csv y results/table1_{baseline}.html")
+        save_word_table(result, out_dir / f"{name}.html", title, footnote)
+        print(f"Generado: {(out_dir / name).relative_to(ROOT)}.{{csv,html}}")
 
 
 def main() -> None:

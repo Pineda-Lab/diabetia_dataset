@@ -53,6 +53,27 @@ def drop_patients_without_careunit(df: pd.DataFrame) -> pd.DataFrame:
     return df[has_careunit]
 
 
+def has_visit(df: pd.DataFrame) -> pd.Series:
+    """Ventanas con al menos una visita. careunit nulo coincide con count_cx_w nulo (sin visitas);
+    son 414,770 ventanas, el número que reporta el manuscrito."""
+    return df["careunit"].notna()
+
+
+def visit_counts(df: pd.DataFrame) -> dict:
+    """Visitas: la suma sobre ventanas cuenta dos veces los años en que se traslapan ventanas sucesivas.
+
+    Cota inferior sin traslapes: por paciente, la mayor suma entre las ventanas impares y las pares
+    (cada conjunto cubre años disjuntos).
+    """
+    counts = df["count_cx_w"].fillna(0)
+    odd = counts.where(df["window"] % 2 == 1, 0).groupby(df[PATIENT_ID]).sum()
+    even = counts.where(df["window"] % 2 == 0, 0).groupby(df[PATIENT_ID]).sum()
+    return {
+        "sum_over_windows": int(counts.sum()),
+        "lower_bound_non_overlapping": int(odd.combine(even, max).sum()),
+    }
+
+
 def process(df: pd.DataFrame) -> pd.DataFrame:
     """Pasos de procesamiento."""
     df = drop_patients_without_careunit(df)
