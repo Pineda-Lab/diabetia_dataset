@@ -119,6 +119,10 @@ Obesity is BMI ≥30. BMI categories are <18.5, 18.5–24.9, 25–29.9 and ≥30
 - The yearly COVID-19 files overlap. Records are deduplicated by `ID_REGISTRO`, keeping the most recent update. Each record is a suspected or confirmed case, not a unique patient.
 - The cancer registry has no patient identifier. Each row is an incident case.
 
+## License
+
+The code is released under the [MIT License](LICENSE). The license covers this code only, not the datasets. Each dataset keeps its own access terms (see [Data](#data)).
+
 ## Contact
 
 Arturo López-Pineda: arturolp@enesmorelia.unam.mx
