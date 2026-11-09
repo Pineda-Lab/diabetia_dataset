@@ -2,13 +2,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
-[![Manuscript: under review](https://img.shields.io/badge/manuscript-under%20review-orange.svg)](#citation)
+[![Manuscript: in preparation](https://img.shields.io/badge/manuscript-in%20preparation-orange.svg)](#citation)
 [![Project: DiabetIA](https://img.shields.io/badge/project-pinedalab.ai%2Fdiabetia-green.svg)](https://pinedalab.ai/diabetia/)
 
 Code to reproduce the descriptive tables of the manuscript:
 
 > López-Pineda A, Tripp J, Santana-Quinteros D, Flores-Garrido M, García-Velázquez LM, Figueroa-Mora KM, Alvarez-Aguilar C, Gómez-García A.
-> **DiabetIA: An Open-Access Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico.** *(under review)*
+> **DiabetIA: An Open-Access Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico.** *(in preparation)*
 
 DiabetIA is a de-identified longitudinal dataset of primary care electronic health records from six clinics of the Mexican Institute for Social Security (IMSS) in Michoacán, Mexico (2005–2020). It includes 136,674 adult patients.
 
@@ -40,7 +40,6 @@ The `.html` files are formatted to be pasted into a word processor. The `.csv` f
 │   └── summary.py        # Harmonized summary of the Mexican National Cancer Registry
 ├── run_all.sh            # Runs the full pipeline in order
 ├── requirements.txt      # Pinned dependencies
-├── CITATION.cff          # Citation metadata
 └── LICENSE               # MIT License
 ```
 
@@ -158,7 +157,12 @@ More about the project, its team and its other subprojects: <https://pinedalab.a
 
 ## Citation
 
-If you use this code, please cite the manuscript (citation details will be updated upon publication). GitHub also offers a "Cite this repository" button, generated from [`CITATION.cff`](CITATION.cff).
+If you use this code, please cite the manuscript:
+
+> López-Pineda A, Tripp J, Santana-Quinteros D, Flores-Garrido M, García-Velázquez LM, Figueroa-Mora KM, Alvarez-Aguilar C, Gómez-García A.
+> DiabetIA: An Open-Access Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico. *In preparation.*
+
+The full reference will be added here upon publication.
 
 ## Acknowledgements
 
