@@ -38,7 +38,7 @@ data/
 
 | Dataset | Source and access |
 |---|---|
-| DiabetIA | National Informatics Ecosystem for Health (ENI Salud), <https://repositorio-salud.conacyt.mx/jspui/handle/1000/56>. Controlled access: training in research with human data and a Data Use Agreement. |
+| DiabetIA | National Informatics Ecosystem for Health (ENI Salud), <https://repositorio-salud.conacyt.mx/jspui/handle/1000/56>. Free download, without registration. |
 | COVID-19 Open Data (Mexico) | Dirección General de Epidemiología, <https://www.gob.mx/salud/documentos/datos-abiertos-152127> |
 | National Cancer Registry (Mexico) | Public information (transparency) request |
 

@@ -89,7 +89,7 @@ CHARACTERISTICS = {
         "Country": "Mexico (Michoacán)",
         "Design / Horizon": "Longitudinal",
         "Data standard": "Tabular (CSV), ICD-10 codes",
-        "Access": "Controlled (DUA)",
+        "Access": "Open (download without registration)",
     },
     "SIDIAP": {
         "Clinical focus": "Population-wide primary care",
