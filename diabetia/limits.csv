@@ -1,12 +1,12 @@
 group,name,column,unit,ref_label,ref_low,ref_high,extreme_low,extreme_low_strict,extreme_high,refs
-Anthropometry,Weight,fn_weight,kg,–,,,,FALSE,635,10
+Anthropometry,Weight,fn_weight,kg,–,,,2.1,FALSE,635,10;18
 Anthropometry,Height,fn_height,m,–,,,0.546,FALSE,2.72,11;12
 Anthropometry,BMI,bmi,kg/m²,18.5–24.9,18.5,24.9,6.7,FALSE,100,2
 Vital signs,Systolic blood pressure,fn_ta_systolic,mmHg,80–120,80,120,50,FALSE,250,1
 Vital signs,Diastolic blood pressure,fn_ta_diastolic,mmHg,60–80,60,80,20,FALSE,150,1
 Vital signs,Body temperature,fn_temperature,°C,36.5–37.5,36.5,37.5,13.7,FALSE,46.5,13;14
-Vital signs,Heart rate,in_heart_rate,beats/min,60–100,60,100,,FALSE,600,15
-Vital signs,Respiratory rate,in_respiratory_frequency,breaths/min,12–20,12,20,,FALSE,,
+Vital signs,Heart rate,in_heart_rate,beats/min,60–100,60,100,10,FALSE,600,15;19
+Vital signs,Respiratory rate,in_respiratory_frequency,breaths/min,12–20,12,20,2,FALSE,,20
 Biochemical,Fasting glucose,fn_fasting_glucose,mg/dL,70–100,70,100,10,FALSE,1000,3
 Biochemical,Blood glucose,in_glucose,mg/dL,70–100 (fasting),70,100,10,FALSE,1000,3
 Biochemical,Blood glucose (glycemia),fn_glycemia,mg/dL,70–100 (fasting),70,100,10,FALSE,1000,3

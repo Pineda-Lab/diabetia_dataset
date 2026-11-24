@@ -26,10 +26,13 @@ REFERENCES = {
     13: "Gilbert M, Busund R, Skagseth A, Nilsen PA, Solbø JP. Resuscitation from accidental hypothermia of 13.7 °C with circulatory arrest. Lancet. 2000;355(9201):375-6.",
     14: "Survival in a heat stroke victim with a core temperature in excess of 46.5 C. Ann Emerg Med. 1982.",
     15: "Mouse Heart Rate in a Human: Diagnostic Mystery of an Extreme Tachyarrhythmia. Indian Pacing Electrophysiol J. 2012. PMCID: PMC3273956.",
+    18: "Guinness World Records. Lightest person. https://guinnessworldrecords.com/world-records/67485-lightest-person",
+    19: "Extreme bradycardia: report of a case exhibiting a ventricular rate of less than twelve per minute. Am Heart J. 1948. doi:10.1016/0002-8703(48)90241-5.",
+    20: "Steynor M, MacDuff A. Always consider the possibility of opioid induced respiratory depression in patients presenting with hypercapnic respiratory failure who fail to improve as expected with appropriate therapy. Case Rep Crit Care. 2015;2015:562319. doi:10.1155/2015/562319.",
 }
 
 # Límites por variable (rango de referencia y valores extremos documentados) en limits.csv,
-# compartido con la figura en R. extreme_low/high vacío: pendiente de validación clínica.
+# compartido con la figura en R. extreme_low/high vacío: sin valor extremo documentado.
 # extreme_low_strict: el límite es "> extreme_low" (p. ej. > 0).
 LIMITS_FILE = Path(__file__).resolve().parent / "limits.csv"
 
@@ -50,7 +53,7 @@ FOOTNOTE = (
     "below the lower limit or whose maximum is above the upper limit; values were flagged, not removed. "
     "“> 0”: no extreme low value is documented, so only values ≤ 0 are flagged. "
     "Urea limits were converted from BUN (urea = BUN × 2.14). "
-    "Pending: limit not yet documented, to be set by the clinical team. References: {references}"
+    "Not documented: no extreme value is documented, so no values are flagged. References: {references}"
 )
 
 
@@ -60,7 +63,7 @@ def _fmt(value: float, decimals: int = 2) -> str:
 
 def _limit(value, strict: bool = False) -> str:
     if pd.isna(value):
-        return "Pending"
+        return "Not documented"
     return f"> {_fmt(value, 3)}" if strict else _fmt(value, 3)
 
 
