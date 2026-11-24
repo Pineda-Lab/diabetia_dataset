@@ -1,0 +1,63 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it as below. If you use the dataset, please cite the data descriptor (preferred citation)."
+type: software
+title: "DiabetIA: analysis code"
+abstract: "Code used to describe and validate DiabetIA, a de-identified longitudinal dataset of primary care electronic health records from Mexico, and to produce the tables and figures of its data descriptor."
+authors:
+  - family-names: López-Pineda
+    given-names: Arturo
+    orcid: "https://orcid.org/0000-0002-3409-1815"
+    affiliation: "Amphora Health; ENES Morelia, National Autonomous University of Mexico (UNAM)"
+  - family-names: Tripp
+    given-names: Joaquin
+    affiliation: "Amphora Health"
+  - family-names: Santana-Quinteros
+    given-names: Daniel
+    affiliation: "Amphora Health; Center for Mathematical Sciences (CCM), UNAM"
+  - family-names: Flores-Garrido
+    given-names: Marisol
+    affiliation: "ENES Morelia, UNAM"
+  - family-names: García-Velázquez
+    given-names: Luis M.
+    affiliation: "ENES Morelia, UNAM"
+  - family-names: Figueroa-Mora
+    given-names: Karina M.
+    affiliation: "Faculty of Physical and Mathematical Sciences, Universidad Michoacana de San Nicolás de Hidalgo (UMSNH)"
+  - family-names: Gómez-García
+    given-names: Anel
+    affiliation: "Biomedical Research Center of Michoacán (CIBIMI), Mexican Institute of Social Security (IMSS)"
+  - family-names: Alvarez-Aguilar
+    given-names: Cleto
+    affiliation: "Faculty of Medical and Biological Sciences, Universidad Michoacana de San Nicolás de Hidalgo (UMSNH)"
+doi: 10.5281/zenodo.24492705
+repository-code: "https://github.com/Pineda-Lab/diabetia_dataset"
+url: "https://pinedalab.ai/diabetia/"
+license: MIT
+keywords:
+  - diabetes
+  - electronic health records
+  - primary care
+  - Mexico
+  - data descriptor
+preferred-citation:
+  type: unpublished
+  title: "DiabetIA: A Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico"
+  notes: "In preparation"
+  authors:
+    - family-names: López-Pineda
+      given-names: Arturo
+      orcid: "https://orcid.org/0000-0002-3409-1815"
+    - family-names: Tripp
+      given-names: Joaquin
+    - family-names: Santana-Quinteros
+      given-names: Daniel
+    - family-names: Flores-Garrido
+      given-names: Marisol
+    - family-names: García-Velázquez
+      given-names: Luis M.
+    - family-names: Figueroa-Mora
+      given-names: Karina M.
+    - family-names: Gómez-García
+      given-names: Anel
+    - family-names: Alvarez-Aguilar
+      given-names: Cleto
