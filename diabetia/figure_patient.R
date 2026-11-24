@@ -20,7 +20,8 @@
 #   Rscript diabetia/figure_patient.R --top 3          3 mejores -> results/patients/figure_patient_<cx_curp>.{pdf,png}
 #                                                      y results/patients/figure_patient_candidates.csv
 #   Rscript diabetia/figure_patient.R --profiles       un paciente por perfil clínico (coronario, sin hipertensión,
-#                                                      cada complicación, ...) -> results/patients/figure_patient_<perfil>_<cx_curp>
+#                                                      cada complicación, ...), sin el de la Figura 3
+#                                                      -> results/patients/figure_patient_<perfil>_<cx_curp>
 #   Rscript diabetia/figure_patient.R <cx_curp> [...]  pacientes indicados -> results/patients/figure_patient_<cx_curp>.{pdf,png}
 
 suppressPackageStartupMessages({
@@ -151,9 +152,10 @@ profiles <- list(
 pick_profiles <- function() {
   strict <- rank_candidates()
   relaxed <- rank_candidates(min_windows = 5, min_bmi_share = 0.6)
+  manuscript <- strict$cx_curp[1]  # el paciente de la Figura 3 no se repite en los perfiles
   picked <- list()
   for (name in names(profiles)) {
-    used <- unlist(lapply(picked, `[[`, "cx_curp"))
+    used <- c(manuscript, unlist(lapply(picked, `[[`, "cx_curp")))
     best <- strict[eval(profiles[[name]]) & !cx_curp %in% used][1]
     if (is.na(best$cx_curp)) best <- relaxed[eval(profiles[[name]]) & !cx_curp %in% used][1]
     if (is.na(best$cx_curp)) { message("Sin candidatos para el perfil ", name); next }
