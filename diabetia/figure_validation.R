@@ -6,8 +6,8 @@
 # derecha da la mediana (P25–P75). Las variables salen de diabetia/limits.csv, igual que la Tabla S2.
 #
 # Uso: Rscript diabetia/figure_validation.R
-# Genera results/manuscript/figure_3_validation.{pdf,png} (Figura 3)
-# y results/auxiliary/figure_3_validation_stats.csv
+# Genera results/manuscript/figure_4_validation.{pdf,png} (Figura 4)
+# y results/auxiliary/figure_4_validation_stats.csv
 
 suppressPackageStartupMessages({
   library(data.table)
@@ -162,7 +162,7 @@ fig <- ggplot() +
   )
 
 for (ext in c("pdf", "png")) {
-  out <- file.path(figure_dir, paste0("figure_3_validation.", ext))
+  out <- file.path(figure_dir, paste0("figure_4_validation.", ext))
   if (ext == "pdf") {
     ggsave(out, fig, width = 180, height = 220, units = "mm", device = "pdf", encoding = "WinAnsi.enc")
   } else {
@@ -175,5 +175,5 @@ for (ext in c("pdf", "png")) {
 # para la leyenda de la figura y el texto de Technical Validation.
 summary_table <- panels[order(order), .(Variable = name, Unit = unit, n_total, n_hidden,
                                         mean, sd, p25, median, p75)]
-fwrite(summary_table, file.path(auxiliary_dir, "figure_3_validation_stats.csv"))
-message("Generado: results/auxiliary/figure_3_validation_stats.csv")
+fwrite(summary_table, file.path(auxiliary_dir, "figure_4_validation_stats.csv"))
+message("Generado: results/auxiliary/figure_4_validation_stats.csv")

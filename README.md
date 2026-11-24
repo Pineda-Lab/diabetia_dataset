@@ -7,7 +7,7 @@
 
 Code to reproduce the tables and figures of the manuscript *DiabetIA: A Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico* (in preparation).
 
-DiabetIA is a pseudonymized longitudinal dataset of primary care electronic health records from six family medicine units of the Mexican Institute of Social Security (IMSS) in Michoacán, Mexico (2005–2020), with 136,674 adult patients. This repository is part of the [DiabetIA project](https://pinedalab.ai/diabetia/) of the Pineda Lab (*Proyecto Insignia*). It contains **only code**; no patient-level data are included.
+DiabetIA is a de-identified longitudinal dataset of primary care electronic health records from six family medicine units of the Mexican Institute of Social Security (IMSS) in Michoacán, Mexico (2005–2020), with 136,674 adult patients. This repository is part of the [DiabetIA project](https://pinedalab.ai/diabetia/) of the Pineda Lab (*Proyecto Insignia*). It contains **only code**; no patient-level data are included.
 
 ## How to run
 
@@ -21,7 +21,7 @@ pip install -r requirements.txt
 ./run_all.sh              # everything; or ./run_all.sh summary | validation
 ```
 
-`diabetia/run.py` reads the DiabetIA file once and writes all the Python tables. The R figures can be run on their own (`Rscript diabetia/figure_*.R`). `figure_patient.R` selects the patient of Figure 2 automatically, or accepts `--top N`, `--profiles` or patient identifiers to draw candidates in `results/patients/`. The comparison datasets are optional: if they are not in `data/`, their columns of Table 2 show "–".
+`diabetia/run.py` reads the DiabetIA file once and writes all the Python tables. The R figures can be run on their own (`Rscript diabetia/figure_*.R`). `figure_patient.R` selects the patient of Figure 3 automatically, or accepts `--top N`, `--profiles` or patient identifiers to draw candidates in `results/patients/`. The comparison datasets are optional: if they are not in `data/`, their columns of Table 2 show "–".
 
 The pipeline takes a few minutes (the COVID-19 files need several GB of RAM). Dependency versions are pinned in `requirements.txt`, and the scripts are deterministic. The manuscript results were produced with Python 3.9.6 on macOS.
 
@@ -46,14 +46,15 @@ SIDIAP, CPRD Aurum and MIMIC-IV are not processed: their columns of Table 2 use 
 
 ## Outputs
 
-Results are written to `results/` (not versioned): `manuscript/`, `supplementary/`, `auxiliary/` (intermediate values cited in the text) and `patients/` (candidates for Figure 2).
+Results are written to `results/` (not versioned): `manuscript/` (figures named by their number, e.g. `figure_3_patient.png`; Figure 2 is the authors' diagram, `figure_2.svg`), `supplementary/`, `auxiliary/` (intermediate values cited in the text) and `patients/` (candidates for Figure 3).
 
 | Manuscript | Script |
 |---|---|
 | Table 1 and Supplementary Table S1: characteristics by type 2 diabetes status | `diabetia/table1.py` |
 | Table 2: comparison with other clinical databases and registries | `diabetia/table2.py` (summaries from `*/summary.py`) |
-| Figure 2: trajectory of one patient | `diabetia/figure_patient.R` |
-| Figure 3: distributions of measurements and laboratory values | `diabetia/figure_validation.R` |
+| Figure 1: selection of the cohort (attrition) | `diabetia/figure_attrition.R` |
+| Figure 3: trajectory of one patient | `diabetia/figure_patient.R` |
+| Figure 4: distributions of measurements and laboratory values | `diabetia/figure_validation.R` |
 | Supplementary Table S2: plausibility | `diabetia/validation.py` |
 | Supplementary Table S3: completeness | `diabetia/completeness.py` |
 | Supplementary Table S7: internal consistency | `diabetia/consistency.py` |
@@ -69,19 +70,25 @@ The `.html` tables are formatted to be pasted into a word processor; the `.csv` 
 - **Cohort.** The tabular release has 477,036 windows from 137,131 patients. The 457 patients without a care unit in any window are excluded, which leaves 136,674 patients and 475,924 windows.
 - **Windows.** Two years of follow-up (`x_start`–`x_end`) and one outcome year (`y_start`–`y_end`). Successive windows start one year apart, so they overlap by one year. The 61,154 windows without a visit have no measurements; completeness and plausibility use the 414,770 windows with a visit.
 - **Baseline (Table 1).** The first window with at least one visit. Age is `age_at_wx`, the age at `x_start`. BMI is the median weight over the squared median height. Vital signs are mean (SD) and biochemical values median (IQR) of the within-window medians.
-- **Diagnoses.** ICD-10 codes recorded in the window: type 2 diabetes E11; complications E11.2–E11.5 (nephropathy, retinopathy, neuropathy, diabetic foot); hypertension I10; dyslipidemia E78; heart disease I20–I25, I50; stroke I60–I64, I69; neoplasms C00–D49. Obesity is BMI ≥30.
-- **Figure 2.** The patient is chosen automatically among those with long follow-up and complete anthropometry. The figure shows no identifier or calendar dates, and age is given in a 5-year band.
-- **Technical Validation.** Follows Kahn et al. (EGEMS 2016;4(1):1244): plausibility, completeness, consistency (25 rules) and temporal coverage. Values beyond the extreme limits are counted, not removed. The limits for minimum weight, heart rate and respiratory rate are pending clinical validation.
+- **Diagnoses.** ICD-10 codes recorded in the window: type 2 diabetes E11; complications E11.2–E11.5 (nephropathy, retinopathy, neuropathy, peripheral circulatory complications); hypertension I10; dyslipidemia E78; heart disease I20–I25, I50; stroke I60–I64, I69; neoplasms C00–D49. Obesity is BMI ≥30.
+- **Figure 3.** The patient is chosen automatically among those with long follow-up and complete anthropometry. The figure shows no identifier or calendar dates, and age is given in a 5-year band.
+- **Technical Validation.** Follows Kahn et al. (EGEMS 2016;4(1):1244): plausibility, completeness, consistency (25 rules) and temporal coverage. Values beyond the extreme limits (`diabetia/limits.csv`, Supplementary Table S4) are counted, not removed.
 - **Comparison datasets.** Ages are grouped as <18, 18–64 and ≥65. COVID-19 records are deduplicated by `ID_REGISTRO` and are cases, not patients; the cancer registry has no patient identifier.
+
+## Privacy
+
+DiabetIA is de-identified but not anonymous: it keeps exact dates of birth and of care to allow longitudinal analyses. Users must not attempt to re-identify patients or to link the data with other sources. Outputs that list individual patients (`results/patients/`) are for internal use and must not be shared.
 
 ## Research team
 
-- **Anel Gómez-García, PhD**: CIBIMI, Mexican Institute of Social Security (IMSS)
-- **Arturo López-Pineda, PhD**: ENES Morelia, National Autonomous University of Mexico (UNAM); Amphora Health
-- **Cleto Alvarez-Aguilar, MD, MS**: Faculty of Medical and Biological Sciences "Dr. Ignacio Chávez", UMSNH
-- **Karina M. Figueroa-Mora, PhD**: Faculty of Physical and Mathematical Sciences "Mat. Luis Manuel Rivera Gutiérrez", UMSNH
+- **Arturo López-Pineda, PhD**: Amphora Health; ENES Morelia, National Autonomous University of Mexico (UNAM)
+- **Joaquin Tripp, BS, MS**: Amphora Health
+- **Daniel Santana-Quinteros, BS, MS**: Amphora Health; Center for Mathematical Sciences (CCM), UNAM
 - **Marisol Flores-Garrido, PhD**: ENES Morelia, UNAM
 - **Luis M. García-Velázquez, PhD**: ENES Morelia, UNAM
+- **Karina M. Figueroa-Mora, PhD**: Faculty of Physical and Mathematical Sciences "Mat. Luis Manuel Rivera Gutiérrez", UMSNH
+- **Anel Gómez-García, PhD** (corresponding author): CIBIMI, Mexican Institute of Social Security (IMSS)
+- **Cleto Alvarez-Aguilar, MD, MS** (corresponding author): Faculty of Medical and Biological Sciences "Dr. Ignacio Chávez", UMSNH
 
 ## Citation
 

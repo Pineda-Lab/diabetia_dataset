@@ -1,4 +1,4 @@
-# Figura 2: trayectoria longitudinal de un paciente de DiabetIA.
+# Figura 3: trayectoria longitudinal de un paciente de DiabetIA.
 #
 # Muestra, ventana por ventana, los diagnósticos registrados, el IMC, la presión arterial, la
 # glucosa, los medicamentos prescritos y el número de visitas de un solo paciente. Ilustra la
@@ -16,7 +16,7 @@
 # glucosa y grupos de medicamentos.
 #
 # Uso:
-#   Rscript diabetia/figure_patient.R                  mejor candidato -> results/manuscript/figure_patient.{pdf,png}
+#   Rscript diabetia/figure_patient.R                  mejor candidato -> results/manuscript/figure_3_patient.{pdf,png}
 #   Rscript diabetia/figure_patient.R --top 3          3 mejores -> results/patients/figure_patient_<cx_curp>.{pdf,png}
 #                                                      y results/patients/figure_patient_candidates.csv
 #   Rscript diabetia/figure_patient.R --profiles       un paciente por perfil clínico (coronario, sin hipertensión,
@@ -57,7 +57,7 @@ complications <- list(
   "Nephropathy (E11.2)" = "type_2_diabetes_mellitus_with_renal_complications",
   "Retinopathy (E11.3)" = "type_2_diabetes_mellitus_with_ophthalmic_complications",
   "Neuropathy (E11.4)" = "type_2_diabetes_mellitus_with_neurological_complications",
-  "Diabetic foot (E11.5)" = "type_2_diabetes_mellitus_with_peripheral_circulatory_complications"
+  "Peripheral circulatory complications (E11.5)" = "type_2_diabetes_mellitus_with_peripheral_circulatory_complications"
 )
 comorbidities <- list(
   "Type 2 diabetes (E11)" = "diabetes_mellitus_type_2",
@@ -123,7 +123,8 @@ rank_candidates <- function(min_windows = 8, min_bmi_share = 0.8) {
     incident_nephropathy = !`Nephropathy (E11.2)`[1] & any(`Nephropathy (E11.2)`),
     incident_retinopathy = !`Retinopathy (E11.3)`[1] & any(`Retinopathy (E11.3)`),
     incident_neuropathy = !`Neuropathy (E11.4)`[1] & any(`Neuropathy (E11.4)`),
-    incident_diabetic_foot = !`Diabetic foot (E11.5)`[1] & any(`Diabetic foot (E11.5)`)
+    incident_peripheral_circulatory = !`Peripheral circulatory complications (E11.5)`[1] &
+      any(`Peripheral circulatory complications (E11.5)`)
   ), by = cx_curp, .SDcols = drug_cols]
   candidates <- scores[windows >= min_windows & bmi_share >= min_bmi_share]
   candidates[, score := 10 * incident_complications + 3 * complications + 5 * incident_t2d + windows +
@@ -142,7 +143,7 @@ profiles <- list(
   nephropathy = quote(incident_nephropathy & complications == 1),
   retinopathy = quote(incident_retinopathy & complications == 1),
   neuropathy = quote(incident_neuropathy & complications == 1),
-  diabetic_foot = quote(incident_diabetic_foot & complications == 1),
+  peripheral_circulatory = quote(incident_peripheral_circulatory & complications == 1),
   multiple_complications = quote(complications >= 3),
   incident_t2d = quote(incident_t2d),
   man = quote(sex == "M")
@@ -188,7 +189,13 @@ draw_patient <- function(id, stem) {
   x_lim <- c(0, max(p$t) + 1)
   p[, .blank := ""]
 
-  x_scale <- scale_x_continuous(limits = x_lim, breaks = seq(0, ceiling(x_lim[2]), 2), expand = c(0, 0))
+  # Eje x en años desde el inicio del seguimiento (una marca por año); cada ventana se dibuja en su centro.
+  # El panel A numera además las ventanas arriba, para que se lea qué columna es cada ventana de dos años.
+  x_scale <- scale_x_continuous(limits = x_lim, breaks = seq(0, ceiling(x_lim[2]), 1), expand = c(0, 0))
+  x_scale_windows <- scale_x_continuous(
+    limits = x_lim, breaks = seq(0, ceiling(x_lim[2]), 1), expand = c(0, 0),
+    sec.axis = dup_axis(breaks = p$t, labels = seq_len(nrow(p)),
+                        name = "Two-year window (consecutive windows overlap by one year)"))
   label_last <- function(d, y, label, colour) {
     last <- d[!is.na(get(y))][.N]
     if (!nrow(last)) return(NULL)
@@ -206,9 +213,12 @@ draw_patient <- function(id, stem) {
     geom_tile(aes(fill = state), width = 0.92, height = 0.75) +
     facet_grid(block ~ ., scales = "free_y", space = "free_y", switch = "y") +
     scale_fill_manual(values = c(absent = col_absent, comorbidity = col_care, complication = col_complication)) +
-    x_scale + labs(title = "A. Diagnoses recorded (chronic complications of T2D in red)", y = NULL) +
-    base_theme + no_x +
-    theme(panel.grid = element_blank(),
+    x_scale_windows + labs(title = "A. Diagnoses recorded (chronic complications of T2D in red)", y = NULL) +
+    base_theme +
+    theme(axis.text.x.bottom = element_blank(), axis.title.x.bottom = element_blank(),
+          axis.text.x.top = element_text(colour = "grey35", size = 6.5),
+          axis.title.x.top = element_text(size = 7, colour = "grey25", margin = margin(b = 3)),
+          panel.grid = element_blank(),
           strip.text.y.left = element_text(angle = 0, face = "bold", size = 6.5, hjust = 1,
                                            colour = "grey25"))
 
@@ -294,7 +304,7 @@ draw_patient <- function(id, stem) {
     event_lines() +
     geom_col(fill = col_care, width = 0.6) +
     x_scale + labs(title = "F. Primary care visits per window", y = "Visits",
-                   x = "Years since the start of follow-up (centre of each two-year window)") +
+                   x = "Years since the start of follow-up") +
     base_theme
 
   # --- Composición: paneles alineados con gtable (incluido en ggplot2) --------------------------------
@@ -305,7 +315,7 @@ draw_patient <- function(id, stem) {
   fig <- do.call(rbind, c(grobs, size = "max"))
   panel_rows <- sort(fig$layout$t[grepl("^panel", fig$layout$name)])
   fig$heights[panel_rows] <- unit(rel_heights, "null")
-  caption <- textGrob(who, x = unit(4, "pt"), hjust = 0, gp = gpar(fontsize = 7, col = "grey30"))
+  caption <- textGrob(who, x = unit(0.5, "npc"), hjust = 0.5, gp = gpar(fontsize = 7, col = "grey30"))
   fig <- gtable::gtable_add_rows(fig, unit(14, "pt"), pos = 0)
   fig <- gtable::gtable_add_grob(fig, caption, t = 1, l = 1, r = ncol(fig))
 
@@ -343,5 +353,5 @@ if (length(chosen) && chosen[1] == "--profiles") {
                         "complicaciones = %d (%d durante el seguimiento)"),
                   candidates$cx_curp[1], candidates$windows[1], candidates$incident_t2d[1],
                   candidates$complications[1], candidates$incident_complications[1]))
-  draw_patient(candidates$cx_curp[1], "manuscript/figure_patient")
+  draw_patient(candidates$cx_curp[1], "manuscript/figure_3_patient")
 }

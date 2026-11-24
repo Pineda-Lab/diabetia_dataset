@@ -3,6 +3,7 @@
 Ventanas por paciente (todas y con visita), duración del seguimiento (primera a última visita, y del inicio de la
 primera ventana al final de la última) y edad mínima (en la primera visita, en la primera ventana y al 31 de
 diciembre de 2018), para comprobar los criterios de "seguimiento de al menos tres años" y "18 años o más".
+También cuenta los pacientes y ventanas con 90 años o más: el método Safe Harbor de HIPAA pide agrupar esas edades.
 Solo se reportan conteos y percentiles agregados.
 """
 
@@ -39,6 +40,8 @@ def cohort_checks(df: pd.DataFrame) -> pd.DataFrame:
     age_first_visit = (first["first_cx"] - first["birthdate"]).dt.days / YEAR
     age_2018 = (pd.Timestamp("2018-12-31") - first["birthdate"]).dt.days / YEAR
     age_first_window = df.sort_values("window").groupby(PATIENT_ID)["age_at_wx"].first()
+    age_last_visit = (first["last_cx"] - first["birthdate"]).dt.days / YEAR
+    age_max_window = g["age_at_wx"].max()
     rows = [
         _describe("Windows per patient", windows, 0),
         _describe("Windows with a visit per patient", visit_windows, 0),
@@ -53,6 +56,10 @@ def cohort_checks(df: pd.DataFrame) -> pd.DataFrame:
         _describe("Age at first window (age_at_wx), years", age_first_window),
         _describe("Age on 31 December 2018, years", age_2018),
         _count("Patients aged < 18 years on 31 December 2018", age_2018 < 18),
+        _describe("Age at last visit (last_cx), years", age_last_visit),
+        _count("Patients aged >= 90 years at last visit", age_last_visit >= 90),
+        _count("Patients aged >= 90 years (age_at_wx) in any window", age_max_window >= 90),
+        _count("Windows with age_at_wx >= 90 years", df["age_at_wx"] >= 90),
         _describe("Year of first visit", first["first_cx"].dt.year, 0),
         _describe("Year of last visit", first["last_cx"].dt.year, 0),
     ]

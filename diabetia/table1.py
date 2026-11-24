@@ -49,7 +49,7 @@ COMPLICATIONS = {
     "Diabetic nephropathy (E11.2)": "type_2_diabetes_mellitus_with_renal_complications",
     "Diabetic retinopathy (E11.3)": "type_2_diabetes_mellitus_with_ophthalmic_complications",
     "Diabetic neuropathy (E11.4)": "type_2_diabetes_mellitus_with_neurological_complications",
-    "Diabetic foot (E11.5)": "type_2_diabetes_mellitus_with_peripheral_circulatory_complications",
+    "Peripheral circulatory complications (E11.5)": "type_2_diabetes_mellitus_with_peripheral_circulatory_complications",
 }
 
 # Comorbilidades: cada una es la presencia de cualquiera de sus columnas de diagnóstico.
