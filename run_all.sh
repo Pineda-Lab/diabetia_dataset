@@ -9,6 +9,7 @@
 #   validation  Technical Validation: Tablas S2, S3, S7, S8 y S9, riesgo de reidentificación, Figura 4 y Figura S2
 #               (requiere R).
 #   all         Todo lo anterior (opción por defecto).
+# Si falta data/diabetia/hk_database.csv, se descarga primero de ENI Salud con download_data.sh.
 # Las bases de comparación que no estén en data/ se omiten; table2.py deja su columna con "–".
 
 set -euo pipefail
@@ -49,6 +50,15 @@ summary_tables() {
 }
 
 case "$MODE" in
+    summary|validation|all)
+        if [ ! -f data/diabetia/hk_database.csv ]; then
+            echo "==> Falta data/diabetia/hk_database.csv; se descarga de ENI Salud"
+            ./download_data.sh
+        fi
+        ;;
+esac
+
+case "$MODE" in
     summary)
         run diabetia/run.py --only summary
         summary_tables
@@ -71,7 +81,7 @@ case "$MODE" in
         run_r diabetia/figure_windows.R
         ;;
     -h|--help)
-        sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'
+        sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'
         exit 0
         ;;
     *)

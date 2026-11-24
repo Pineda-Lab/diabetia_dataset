@@ -23,11 +23,11 @@ DiabetIA is a de-identified longitudinal dataset of primary care electronic heal
 
 ## Data availability
 
-DiabetIA is owned by IMSS and is freely available, without registration, from the repository of the National Informatics Ecosystem for Health (ENI Salud): <https://repositorio-salud.conacyt.mx/jspui/handle/1000/56>. The release consists of a tabular file in CSV format and its data dictionary. The comparison datasets are obtained from their own sources:
+DiabetIA is owned by IMSS and is freely available, without registration, from the repository of the National Informatics Ecosystem for Health (ENI Salud): <https://repositorio-salud.conacyt.mx/jspui/handle/1000/296>. The release analysed in the manuscript (`hk_database_17ago2023.zip`) consists of a tabular file in CSV format and its data dictionary. The comparison datasets are obtained from their own sources:
 
 | Dataset | Source and access |
 |---|---|
-| DiabetIA | ENI Salud, <https://repositorio-salud.conacyt.mx/jspui/handle/1000/56>. Open download. |
+| DiabetIA | ENI Salud, <https://repositorio-salud.conacyt.mx/jspui/handle/1000/296>. Open download (`./download_data.sh`). |
 | COVID-19 Open Data (Mexico) | Dirección General de Epidemiología, <https://www.gob.mx/salud/documentos/datos-abiertos-152127>. Open download. |
 | National Cancer Registry (Mexico) | Public information (transparency) request. |
 | SIDIAP, CPRD Aurum, MIMIC-IV | Not processed; values are taken from their published data resource profiles (`LITERATURE` in `diabetia/table2.py`). |
@@ -65,7 +65,13 @@ For the figures, install the R packages once:
 install.packages(c("data.table", "ggplot2", "scales", "wesanderson"))
 ```
 
-**2. Place the data in `data/`** as shown in [Data availability](#data-availability). Only `data/diabetia/hk_database.csv` is required; the comparison datasets are optional.
+**2. Download DiabetIA:**
+
+```bash
+./download_data.sh
+```
+
+The script downloads the release and its data dictionary from ENI Salud to `data/diabetia/` and verifies that they are the files used in the manuscript (SHA-256). `run_all.sh` runs it automatically when the file is missing. The comparison datasets are optional and are placed manually in `data/` as shown in [Data availability](#data-availability).
 
 **3. Run the pipeline** from the root of the repository:
 
