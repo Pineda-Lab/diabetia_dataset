@@ -1,4 +1,4 @@
-"""Procesamiento de datos de DiabetIA Insignia.
+"""Procesamiento de datos de DiabetIA.
 
 Lee data/diabetia/hk_database.csv y aplica los pasos de procesamiento.
 """

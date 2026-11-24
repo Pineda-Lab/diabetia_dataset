@@ -19,7 +19,7 @@ This repository contains the code used to describe and validate DiabetIA, and to
 
 ## Overview
 
-DiabetIA is a de-identified longitudinal dataset of primary care electronic health records from six family medicine units of the Mexican Institute of Social Security (IMSS) in Michoacán, Mexico: 136,674 adults followed between 2005 and 2020, summarized in two-year windows per patient. This repository contains the code that characterizes the cohort and assesses the quality of the release. Methods and results are described in the manuscript. DiabetIA is part of the [DiabetIA project](https://pinedalab.ai/diabetia/) of the Pineda Lab (*Proyecto Insignia*).
+DiabetIA is a de-identified longitudinal dataset of primary care electronic health records from six family medicine units of the Mexican Institute of Social Security (IMSS) in Michoacán, Mexico: 136,674 adults followed between 2005 and 2020, summarized in two-year windows per patient. This repository contains the code that characterizes the cohort and assesses the quality of the release. Methods and results are described in the manuscript. DiabetIA is part of the [DiabetIA project](https://pinedalab.ai/diabetia/) of the Pineda Lab.
 
 ## Data availability
 
@@ -53,8 +53,8 @@ The comparison datasets are optional: when they are absent, their columns of Tab
 **1. Install the dependencies.**
 
 ```bash
-git clone https://github.com/Pineda-Lab/diabetia-insignia.git
-cd diabetia-insignia
+git clone https://github.com/Pineda-Lab/diabetia_dataset.git
+cd diabetia_dataset
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
@@ -168,4 +168,4 @@ This project received partial funding from the participating institutions and fr
 
 ## License and contact
 
-The code is released under the [MIT License](LICENSE); each dataset keeps its own terms of access. Questions about the code can be submitted as [GitHub Issues](https://github.com/Pineda-Lab/diabetia-insignia/issues). Code comments are in Spanish; variable names and outputs are in English. Contact: Dr. Arturo López-Pineda, arturolp@enesmorelia.unam.mx.
+The code is released under the [MIT License](LICENSE); each dataset keeps its own terms of access. Questions about the code can be submitted as [GitHub Issues](https://github.com/Pineda-Lab/diabetia_dataset/issues). Code comments are in Spanish; variable names and outputs are in English. Contact: Dr. Arturo López-Pineda, arturolp@enesmorelia.unam.mx.
