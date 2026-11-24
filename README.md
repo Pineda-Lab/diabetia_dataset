@@ -1,9 +1,19 @@
-# DiabetIA: analysis code
+<p align="center">
+  <img src="assets/diabetia-logo-outline.png" alt="DiabetIA logo" width="180">
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
-[![Manuscript: in preparation](https://img.shields.io/badge/manuscript-in%20preparation-orange.svg)](#citation)
-[![Project: DiabetIA](https://img.shields.io/badge/project-pinedalab.ai%2Fdiabetia-green.svg)](https://pinedalab.ai/diabetia/)
+<h1 align="center">DiabetIA: analysis code</h1>
+
+<p align="center">
+  <em>A longitudinal electronic health record dataset for diabetes research from Mexico</em>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
+  <a href="#citation"><img src="https://img.shields.io/badge/manuscript-in%20preparation-orange.svg" alt="Manuscript: in preparation"></a>
+  <a href="https://pinedalab.ai/diabetia/"><img src="https://img.shields.io/badge/project-pinedalab.ai%2Fdiabetia-green.svg" alt="Project: DiabetIA"></a>
+</p>
 
 This repository contains the code used to describe and validate DiabetIA, and to produce the tables and figures of the data descriptor *DiabetIA: A Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico* (in preparation). It contains **only code**; no patient-level data are included.
 
