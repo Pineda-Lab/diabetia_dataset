@@ -11,12 +11,12 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python 3.9+"></a>
-  <a href="#citation"><img src="https://img.shields.io/badge/manuscript-in%20preparation-orange.svg" alt="Manuscript: in preparation"></a>
+  <a href="https://doi.org/10.64898/2026.11.24.26368871"><img src="https://img.shields.io/badge/preprint-medRxiv-b31b1b.svg" alt="Preprint: medRxiv"></a>
   <a href="https://doi.org/10.5281/zenodo.24492705"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.24492705.svg" alt="DOI: 10.5281/zenodo.24492705"></a>
   <a href="https://pinedalab.ai/diabetia/"><img src="https://img.shields.io/badge/project-pinedalab.ai%2Fdiabetia-green.svg" alt="Project: DiabetIA"></a>
 </p>
 
-This repository contains the code used to describe and validate DiabetIA, and to produce the tables and figures of the data descriptor *DiabetIA: A Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico* (in preparation). It contains **only code**; no patient-level data are included.
+This repository contains the code used to describe and validate DiabetIA, and to produce the tables and figures of the data descriptor *DiabetIA: A Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico* ([medRxiv preprint](https://doi.org/10.64898/2026.11.24.26368871)). It contains **only code**; no patient-level data are included.
 
 ## Overview
 
@@ -138,17 +138,21 @@ DiabetIA is de-identified but not anonymous, because it keeps exact dates. Users
 
 ## Citation
 
-If you use the dataset, please cite the data descriptor (the full reference will be added upon publication):
+If you use the dataset, please cite the data descriptor, currently available as a preprint:
 
-> López-Pineda A, Tripp J, Santana-Quinteros D, Flores-Garrido M, García-Velázquez LM, Figueroa-Mora KM, Gómez-García A, Alvarez-Aguilar C. DiabetIA: A Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico. *In preparation.*
+> López-Pineda A, Tripp J, Santana-Quinteros D, Flores-Garrido M, García-Velázquez LM, Figueroa-Mora KM, Gómez-García A, Alvarez-Aguilar C. DiabetIA: A Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico. *medRxiv* (2026). doi:[10.64898/2026.11.24.26368871](https://doi.org/10.64898/2026.11.24.26368871).
 
 ```bibtex
-@unpublished{lopezpineda_diabetia,
-  author = {López-Pineda, Arturo and Tripp, Joaquin and Santana-Quinteros, Daniel and
-            Flores-Garrido, Marisol and García-Velázquez, Luis M. and Figueroa-Mora, Karina M. and
-            Gómez-García, Anel and Alvarez-Aguilar, Cleto},
-  title  = {{DiabetIA}: A Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico},
-  note   = {In preparation}
+@article{lopezpineda_diabetia,
+  author  = {López-Pineda, Arturo and Tripp, Joaquin and Santana-Quinteros, Daniel and
+             Flores-Garrido, Marisol and García-Velázquez, Luis M. and Figueroa-Mora, Karina M. and
+             Gómez-García, Anel and Alvarez-Aguilar, Cleto},
+  title   = {{DiabetIA}: A Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico},
+  journal = {medRxiv},
+  year    = {2026},
+  doi     = {10.64898/2026.11.24.26368871},
+  url     = {https://doi.org/10.64898/2026.11.24.26368871},
+  note    = {Preprint}
 }
 ```
 

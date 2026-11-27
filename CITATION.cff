@@ -40,9 +40,13 @@ keywords:
   - Mexico
   - data descriptor
 preferred-citation:
-  type: unpublished
+  type: article
   title: "DiabetIA: A Longitudinal Electronic Health Record Dataset for Diabetes Research from Mexico"
-  notes: "In preparation"
+  journal: medRxiv
+  year: 2026
+  doi: 10.64898/2026.11.24.26368871
+  url: "https://doi.org/10.64898/2026.11.24.26368871"
+  notes: "Preprint"
   authors:
     - family-names: López-Pineda
       given-names: Arturo
